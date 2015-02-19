@@ -1,0 +1,26 @@
+<template name="home">
+    {{#if currentUser}}
+        <h2>Select an environment or create a new one</h2>
+        {{> list_environments}}
+        {{> add_environment}}
+    {{else}}
+        <h2>Please log in to continue</h2>
+    {{/if}}
+</template>
+
+<template name="list_environments">
+    <ul>
+    {{#each environments}}
+        <li><a href="view/environment/{{_id}}">{{name}}</a>({{width}}:{{height}})<a href="delete/environment/{{_id}}">delete</a></li>
+    {{/each}}
+    </ul>
+</template>
+
+<template name="add_environment">
+    <form>
+        <input type="text" name="name" value="New Environment">
+        <input type="number" min="1" max="50" value="10" name="width">
+        <input type="number" min="1" max="50" value="10" name="height">
+        <input type="submit" value="New Environment">
+    </form>
+</template>
