@@ -7,7 +7,7 @@ Router.route('/', function () {
 });
 
 Router.route('view/environment/:_id', function () {
-    var env = Environments.findOne(this.params._id);
+    var env = env_data.data.findOne(this.params._id);
     if (env){
         Session.set("current_env",this.params._id);
         this.render('environment_view', {data: function () {
@@ -28,6 +28,6 @@ Router.route('view/environment', function(){
 });
 
 Router.route('delete/environment/:_id', function () {
-    Meteor.call("delete_environment", this.params._id);
+    Meteor.call("environment.delete", this.params._id);
     this.redirect('/');
 });
