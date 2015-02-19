@@ -1,6 +1,6 @@
 Template.list_environments.helpers({
     environments: function(){
-        return env_data.data.find().fetch();
+        return Environments.find().fetch();
     }
 });
 
@@ -16,7 +16,6 @@ Template.add_environment.events({
         function(err, obj) {
             if (err)
                 console.error(err);
-            console.log(obj);
             if (obj){
                 Router.go("/view/environment/"+obj._id);
             }

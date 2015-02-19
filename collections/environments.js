@@ -1,59 +1,48 @@
-Environments = function(){
-    if (Meteor.isServer){
-        var data = this.data = new Mongo.Collection('environments');
-        Meteor.publish('environments', function(){
-            var currentUserId = this.userId;
-            return data.find({createdBy: currentUserId})
-        });
-    } else {
-        Meteor.subscribe('environments');
-        this.data = new Mongo.Collection('environments');
-    }
-};
-
+Environments = new Mongo.Collection('environments');
 if (Meteor.isClient){
-    env_data = new Environments();
-} else {
-    Environment = function(db, params){
+    Meteor.subscribe('environments');
+}
+if (Meteor.isServer){
+    Meteor.publish('environments', function(){
+        var currentUserId = this.userId;
+        return Environments.find({createdBy: currentUserId})
+    });
+    Environment = function(params){
         params || (params = {});
         _.defaults(params, {
             name: "New Environment",
             width: 15,
             height: 15
         });
-        this._id = db.insert({
+        this._id = Environments.insert({
             name: params.name,
             width: params.width,
             height: params.height,
-            createdBy: params.userId,
+            createdBy: Meteor.userId(),
             soil: []
         });
-    }
-    
-    _.extend(Environments.prototype, {
-        create: function(params){
-            var currentUserId = Meteor.userId();
-            if (currentUserId){
-                _.extend(params, {userId:currentUserId})
-                return new Environment(this.data, params);
-            }
-        },
-        remove: function(_id){
-            var currentUserId = Meteor.userId();
-            var env = this.data.findOne({createdBy: currentUserId, _id:_id});
-            if (env){
-                this.data.remove({_id:_id});
+        for (x=0; x < params.width; x++){
+            for (y=0; y < params.height; y++){
+                var soil = new Soil(this._id, {
+                    x:x,
+                    y:y
+                });
             }
         }
+    };
+    Meteor.startup(function(){
+        Meteor.methods({
+            "environment.create": function(params){
+                if (params && Meteor.userId()){
+                    return new Environment(params);
+                };
+            },
+            "environment.delete": function(_id){
+                var env = Environments.findOne(_id);
+                if (env && Meteor.userId() === env.createdBy){
+                    Environments.remove(_id);
+                }
+            }
+        });
     });
-    env_data = new Environments();
-    var meteor_methods = _.reduce(
-        {create:"create", remove:"delete"},
-        function(methods, meteor_name, name){
-            methods["environment."+meteor_name] = Environments.prototype[name].bind(env_data);
-            return methods;
-        },
-        {}
-    )
-    Meteor.methods(meteor_methods);
 };

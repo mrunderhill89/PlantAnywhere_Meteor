@@ -7,7 +7,7 @@ Router.route('/', function () {
 });
 
 Router.route('view/environment/:_id', function () {
-    var env = env_data.data.findOne(this.params._id);
+    var env = Environments.findOne(this.params._id);
     if (env){
         Session.set("current_env",this.params._id);
         this.render('environment_view', {data: function () {
