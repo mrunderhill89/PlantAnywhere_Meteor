@@ -1,4 +1,9 @@
 <template name="environment_view">
     <h2>Environment View - {{name}}</h2>
     <div class="canvas"></div>
+    {{#with clear_canvas}}
+        {{#each Soil}}
+            {{draw_soil}}
+        {{/each}}
+    {{/with}}
 </template>

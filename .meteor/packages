@@ -10,3 +10,4 @@ accounts-password
 accounts-ui
 jquery
 iron:router
+aramk:requirejs
