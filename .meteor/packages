@@ -13,3 +13,5 @@ iron:router
 aramk:requirejs
 andreww:baconjs
 eldog:pixijs
+mquandalle:bower
+reactjs:react

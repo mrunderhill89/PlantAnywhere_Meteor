@@ -1,0 +1,9 @@
+{
+  "name": "PlantAnywhere",
+  "version": "0.0.1",
+  "dependencies": {
+    "react-pixi": "*",
+    "backbone": "1.1.0"
+  },
+  "private": true
+}
